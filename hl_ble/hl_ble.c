@@ -17,35 +17,27 @@ void hl_ble_init(void)
     /*bt controller init*/
     ret = esp_bt_controller_init(&bt_cfg);
     if (ret) {
-        ESP_LOGE(BLE_TAG, "%s initialize controller failed: %s\n", __func__, esp_err_to_name(ret));
+        ESP_LOGE(BLE_TAG, "%s initialize controller failed: %s", __func__, esp_err_to_name(ret));
     }
 
     /*enable ble controller*/
     ret = esp_bt_controller_enable(ESP_BT_MODE_BLE);
     if (ret) {
-        ESP_LOGE(BLE_TAG, "%s enable controller failed: %s\n", __func__, esp_err_to_name(ret));
+        ESP_LOGE(BLE_TAG, "%s enable controller failed: %s", __func__, esp_err_to_name(ret));
         return;
     }
 
     /*ble protocol stack init*/
     ret = esp_bluedroid_init();
     if (ret) {
-        ESP_LOGE(BLE_TAG, "%s init bluetooth failed: %s\n", __func__, esp_err_to_name(ret));
+        ESP_LOGE(BLE_TAG, "%s init bluetooth failed: %s", __func__, esp_err_to_name(ret));
         return;
     }
 
     /*ble protocol stack enable*/
     ret = esp_bluedroid_enable();
     if (ret) {
-        ESP_LOGE(BLE_TAG, "%s enable bluetooth failed: %s\n", __func__, esp_err_to_name(ret));
+        ESP_LOGE(BLE_TAG, "%s enable bluetooth failed: %s", __func__, esp_err_to_name(ret));
         return;
     }
-
-    /*ble gap init*/
-    ret = hl_ble_gap_init();
-    if (ret) {
-        ESP_LOGE(BLE_TAG, "%s ble init failed: %s\n", __func__, esp_err_to_name(ret));
-        return;
-    }
-    
 }
