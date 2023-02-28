@@ -41,6 +41,13 @@ esp_err_t hl_ble_gap_set_ext_adv_data_raw(uint8_t instance, const uint8_t *data,
 
 esp_err_t hl_ble_gap_start_ext_adv(uint8_t num_adv, const esp_ble_gap_ext_adv_t *ext_adv);
 
+/*periodic adv*/
+esp_err_t hl_ble_gap_set_periodic_adv_params(uint8_t instance, const esp_ble_gap_periodic_adv_params_t *params);
+
+esp_err_t hl_ble_gap_set_periodic_adv_data_raw(uint8_t instance, const uint8_t *data, uint16_t length);
+
+esp_err_t hl_ble_gap_start_periodic_adv(uint8_t instance);
+
 #ifdef __cplusplus
 }
 #endif

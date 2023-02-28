@@ -13,6 +13,7 @@ nvs_flash
 set(ble_source 
 "hl_ble/hl_ble.c"
 "hl_ble/hl_ble_gap.c"
+"hl_ble/hl_ble_gatt.c"
 )
 set(ble_include 
 "hl_ble"

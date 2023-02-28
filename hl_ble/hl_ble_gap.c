@@ -72,3 +72,18 @@ esp_err_t hl_ble_gap_start_ext_adv(uint8_t num_adv, const esp_ble_gap_ext_adv_t 
     return esp_ble_gap_ext_adv_start(num_adv, ext_adv);
 }
 
+/*periodic adv*/
+esp_err_t hl_ble_gap_set_periodic_adv_params(uint8_t instance, const esp_ble_gap_periodic_adv_params_t *params)
+{
+    return esp_ble_gap_periodic_adv_set_params(instance, params);
+}
+
+esp_err_t hl_ble_gap_set_periodic_adv_data_raw(uint8_t instance, const uint8_t *data, uint16_t length)
+{
+    return esp_ble_gap_config_periodic_adv_data_raw(instance, length, data);
+}
+
+esp_err_t hl_ble_gap_start_periodic_adv(uint8_t instance)
+{
+    return esp_ble_gap_periodic_adv_start(instance);
+}
