@@ -6,9 +6,12 @@ extern "C"
 {
 #endif
 
+#include "driver/spi_master.h"
+#include "driver/gpio.h"
+
 typedef enum {
-    HL_SPI2,
-    HL_SPI3,
+    HL_SPI2 = SPI2_HOST,
+    HL_SPI3 = SPI3_HOST,
 } hl_spi_type;
 
 typedef enum {

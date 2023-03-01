@@ -1,7 +1,6 @@
-#include "hl_spi.h"
+#include <string.h>
 
-#include "driver/spi_master.h"
-#include "driver/gpio.h"
+#include "hl_spi.h"
 
 #define SPI2_MAX_TRANSFER_SIZE      240 * 1
 #define SPI2_PIN_NUM_MISO           1
@@ -21,7 +20,7 @@
 #define SPI3_PIN_NUM_CS2            2
 #define SPI3_PIN_NUM_CS3            2
 
-static void hl_sp1_device1_pre_transfer_callback(spi_transaction_t *t);
+static void hl_spi2_device1_pre_transfer_callback(spi_transaction_t *t);
 
 static spi_device_handle_t g_spi2_device1;
 
@@ -73,7 +72,7 @@ static spi_device_interface_config_t g_spi2_device1_config = {
     .mode = 0,
     .spics_io_num = SPI2_PIN_NUM_CS1,
     .queue_size = 7,
-
+    .pre_cb = hl_spi2_device1_pre_transfer_callback
 };
 
 /** spi_transaction_t
@@ -89,7 +88,7 @@ static spi_device_interface_config_t g_spi2_device1_config = {
  *.rx_data                  如果设置了SPI_TRANS_USE_RXDATA，数据会被这个变量直接接收
  */
 
-static void hl_spi1_device1_pre_transfer_callback(spi_transaction_t *t)
+static void hl_spi2_device1_pre_transfer_callback(spi_transaction_t *t)
 {
     
 }
@@ -99,9 +98,9 @@ void hl_spi_master_init(hl_spi_type type)
 {
     esp_err_t ret = ESP_FAIL;
     if (type == HL_SPI2) {
-        ret=spi_bus_initialize(HSPI_HOST, &g_spi2_bus_config, SPI_DMA_CH_AUTO);
+        ret=spi_bus_initialize(SPI2_HOST, &g_spi2_bus_config, SPI_DMA_CH_AUTO);
     } else if (type == HL_SPI3) {
-        ret=spi_bus_initialize(VSPI_HOST, &g_spi3_bus_config, SPI_DMA_CH_AUTO);
+        ret=spi_bus_initialize(SPI3_HOST, &g_spi3_bus_config, SPI_DMA_CH_AUTO);
     }
     ESP_ERROR_CHECK(ret);
 }
@@ -111,7 +110,7 @@ void hl_spi_master_add_device(hl_spi_device device)
     esp_err_t ret = ESP_FAIL;
     if (device == HL_SPI2_DEVICE1 || device == HL_SPI2_DEVICE2 || device == HL_SPI2_DEVICE3) {
         if (device == HL_SPI2_DEVICE1) {
-            ret=spi_bus_add_device(HSPI_HOST, &g_spi2_device1_config, &g_spi2_device1);
+            ret=spi_bus_add_device(SPI2_HOST, &g_spi2_device1_config, &g_spi2_device1);
         } else if (device == HL_SPI2_DEVICE2) {
 
         } else if (device == HL_SPI2_DEVICE3) {
