@@ -41,6 +41,11 @@ esp_err_t hl_ble_gap_set_scan_rsp_data(uint8_t *raw_data, uint32_t raw_data_len)
     return esp_ble_gap_config_scan_rsp_data_raw(raw_data, raw_data_len);
 }
 
+esp_err_t hl_ble_gap_set_scan_params(esp_ble_scan_params_t *scan_params)
+{
+    return esp_ble_gap_set_scan_params(scan_params);
+}
+
 esp_err_t hl_ble_gap_start_scanning(uint32_t duration)
 {
     return esp_ble_gap_start_scanning(duration);
