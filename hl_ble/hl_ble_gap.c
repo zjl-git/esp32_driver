@@ -92,3 +92,45 @@ esp_err_t hl_ble_gap_start_periodic_adv(uint8_t instance)
 {
     return esp_ble_gap_periodic_adv_start(instance);
 }
+
+/*smp*/
+esp_err_t hl_ble_gap_set_security_param(esp_ble_sm_param_t param_type, void *value, uint8_t len)
+{
+    return esp_ble_gap_set_security_param(param_type, value, len);
+}
+
+esp_err_t hl_ble_gap_passkey_reply(esp_bd_addr_t bd_addr, bool accept, uint32_t passkey)
+{
+    return esp_ble_passkey_reply(bd_addr, accept, passkey);
+}
+
+esp_err_t hl_ble_gap_set_encryption(esp_bd_addr_t bd_addr, esp_ble_sec_act_t sec_act)
+{
+    return esp_ble_set_encryption(bd_addr, sec_act);
+}
+
+esp_err_t hl_ble_gap_security_rsp(esp_bd_addr_t bd_addr, bool accept)
+{
+    return esp_ble_gap_security_rsp(bd_addr, accept);
+}
+
+esp_err_t hl_ble_confirm_reply(esp_bd_addr_t bd_addr, bool accept)
+{
+    return esp_ble_confirm_reply(bd_addr, accept);
+}
+
+
+esp_err_t hl_ble_gap_oob_req_reply(esp_bd_addr_t bd_addr, uint8_t *TK, uint8_t len)
+{
+    return esp_ble_oob_req_reply(bd_addr, TK, len);
+}
+
+int hl_ble_gap_get_bond_device_num(void)
+{
+    return esp_ble_get_bond_device_num();
+}
+
+esp_err_t hl_ble_gap_get_bond_device_list(int *dev_num, esp_ble_bond_dev_t *dev_list)
+{
+    return esp_ble_get_bond_device_list(dev_num, dev_list);
+}
