@@ -28,6 +28,14 @@ typedef enum {
 
 typedef void (*gpio_isr_callback)(void);
 
+void hl_gpio_init(uint8_t pin, hl_gpio_mode mode, hl_gpio_int_type intr, uint8_t pull_down, uint8_t pull_up);
+
+void hl_gpio_set_level(uint8_t pin, uint8_t level);
+
+uint8_t hl_gpio_get_level(uint8_t pin);
+
+void hl_gpio_register_isr_callback(uint8_t pin, gpio_isr_callback callback);
+
 
 #ifdef __cplusplus
 }
