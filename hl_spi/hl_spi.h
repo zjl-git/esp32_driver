@@ -23,6 +23,14 @@ typedef enum {
     HL_SPI3_DEVICE3,
 } hl_spi_device;
 
+void hl_spi_master_init(hl_spi_type type);
+
+void hl_spi_master_add_device(hl_spi_device device, int8_t cs_pin);
+
+void hl_spi_master_device_write(hl_spi_device device, uint8_t *data, uint32_t length);
+
+void hl_spi_master_device_read(hl_spi_device device, uint8_t *data);
+
 #ifdef __cplusplus
 }
 #endif

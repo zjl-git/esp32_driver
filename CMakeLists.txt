@@ -55,22 +55,36 @@ set(uart_requires
 driver
 )
 
+#i2c
+set(i2c_source 
+"hl_i2c/hl_simulate_i2c.c"
+)
+set(i2c_include 
+"hl_i2c"
+)
+set(i2c_requires 
+driver
+)
+
 
 idf_component_register(SRCS ${nvs_source}
                             ${ble_source}
                             ${gpio_source}
                             ${spi_source}
                             ${uart_source}
+                            ${i2c_source}
                        INCLUDE_DIRS ${nvs_include}
                                     ${ble_include}
                                     ${gpio_include}
                                     ${spi_include}
                                     ${uart_include}
+                                    ${i2c_include}
                        REQUIRES ${nvs_requires}
                                 ${ble_requires}
                                 ${gpio_requires}
                                 ${spi_requires}
                                 ${uart_requires}
+                                ${i2c_requires}
                        )
 
 target_compile_options(${COMPONENT_LIB} PRIVATE "-Wno-format")

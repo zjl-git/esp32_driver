@@ -16,10 +16,10 @@ static void IRAM_ATTR hl_gpio_isr_handler(void* arg)
 
 void hl_gpio_init(uint8_t pin, hl_gpio_mode mode, hl_gpio_int_type intr, uint8_t pull_down, uint8_t pull_up)
 {
-    gpio_config_t io_conf = {};
+    gpio_config_t io_conf ;
     io_conf.intr_type = intr;
     io_conf.mode = (gpio_mode_t)mode;
-    io_conf.pin_bit_mask = 1 << pin;
+    io_conf.pin_bit_mask = 1ULL << pin;
     io_conf.pull_down_en = pull_down;
     io_conf.pull_up_en = pull_up;
     gpio_config(&io_conf);
