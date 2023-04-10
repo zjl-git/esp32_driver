@@ -6,13 +6,22 @@
 #include "freertos/task.h"
 #include "freertos/queue.h"
 
-#define UART1_TX_PIN_NUM          1
-#define UART1_RX_PIN_NUM          1
+#ifdef ESP32S3_SOC
+#define UART1_TX_PIN_NUM          -1                /*define gpio17*/
+#define UART1_RX_PIN_NUM          -1                /*define gpio18*/
+#define UART2_TX_PIN_NUM          -1
+#define UART2_RX_PIN_NUM          -1
+#else #define ESP32_SOC
+#define UART1_TX_PIN_NUM          -1                /*define gpio10*/
+#define UART1_RX_PIN_NUM          -1                /*define gpio9*/
+#define UART2_TX_PIN_NUM          -1                /*define gpio17*/
+#define UART2_RX_PIN_NUM          -1                /*define gpio16*/
+#endif
+
+
 #define UART1_TX_BUF_SIZE         512
 #define UART1_RX_BUF_SIZE         512
 
-#define UART2_TX_PIN_NUM          1
-#define UART2_RX_PIN_NUM          1
 #define UART2_TX_BUF_SIZE         512
 #define UART2_RX_BUF_SIZE         512
 
@@ -57,7 +66,7 @@ static void hl_uart2_event_task(void *pvParameters)
     uint8_t *buffer = (uint8_t*) malloc(UART2_RX_BUF_SIZE);
 
     while (1) {
-        if (xQueueReceive(g_uart1_queue, (void * )&event, (TickType_t)portMAX_DELAY)) {
+        if (xQueueReceive(g_uart2_queue, (void * )&event, (TickType_t)portMAX_DELAY)) {
             switch (event.type) {
                 case UART_DATA:
                     uart_read_bytes(HL_UART_PORT2, buffer, event.size, portMAX_DELAY);
@@ -66,12 +75,12 @@ static void hl_uart2_event_task(void *pvParameters)
 
                 case UART_FIFO_OVF:
                     uart_flush_input(HL_UART_PORT2);
-                    xQueueReset(g_uart1_queue);
+                    xQueueReset(g_uart2_queue);
                     break;
 
                 case UART_BUFFER_FULL:
                     uart_flush_input(HL_UART_PORT2);
-                    xQueueReset(g_uart1_queue);
+                    xQueueReset(g_uart2_queue);
                     break;
 
                 default:
@@ -97,14 +106,14 @@ void hl_uart_init(hl_uart_port port, uint32_t baud_rate)
     };
 
     if (port == HL_UART_PORT1) {
-        uart_driver_install(HL_UART_PORT1, UART1_RX_BUF_SIZE * 2, UART1_TX_BUF_SIZE * 2, 20, &g_uart1_queue, 0);
         uart_param_config(HL_UART_PORT1, &uart_config);
         uart_set_pin(HL_UART_PORT1, UART1_TX_PIN_NUM, UART1_RX_PIN_NUM, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+        uart_driver_install(HL_UART_PORT1, UART1_RX_BUF_SIZE * 2, UART1_TX_BUF_SIZE * 2, 20, &g_uart1_queue, 0);
         xTaskCreate(hl_uart1_event_task, "uart1_event_task", 2048, NULL, 12, NULL);
     } else if (port == HL_UART_PORT2) {
-        uart_driver_install(HL_UART_PORT2, UART2_RX_BUF_SIZE * 2, UART2_TX_BUF_SIZE * 2, 20, &g_uart2_queue, 0);
         uart_param_config(HL_UART_PORT2, &uart_config);
         uart_set_pin(HL_UART_PORT2, UART2_TX_PIN_NUM, UART2_RX_PIN_NUM, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+        uart_driver_install(HL_UART_PORT2, UART2_RX_BUF_SIZE * 2, UART2_TX_BUF_SIZE * 2, 20, &g_uart2_queue, 0);
         xTaskCreate(hl_uart2_event_task, "uart2_event_task", 2048, NULL, 12, NULL);
     }
 }

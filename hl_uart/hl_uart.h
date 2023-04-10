@@ -17,6 +17,11 @@ typedef enum {
 
 typedef void (*uart_rx_callback)(uint8_t *buf, uint32_t len);
 
+void hl_uart_init(hl_uart_port port, uint32_t baud_rate);
+
+void hl_uart_write(hl_uart_port port, uint8_t * buf, uint32_t len);
+
+void hl_uart_register_rx_callback(hl_uart_port port, uart_rx_callback callback);
 
 #ifdef __cplusplus
 }

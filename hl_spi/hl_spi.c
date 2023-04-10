@@ -1,36 +1,28 @@
 #include <string.h>
 
 #include "hl_spi.h"
-
-#define esp32s3_soc
+#include "main_config.h"
 
 #define SPI2_MAX_TRANSFER_SIZE      240 * 1
+#define SPI3_MAX_TRANSFER_SIZE      240 * 1
 
-#ifdef esp32s3_soc
+#ifdef ESP32S3_SOC
 #define SPI2_PIN_NUM_MISO           13
 #define SPI2_PIN_NUM_MOSI           11
 #define SPI2_PIN_NUM_CLK            12
-#elif #define esp32_soc
-#define SPI2_PIN_NUM_MISO           1
-#define SPI2_PIN_NUM_MOSI           1
-#define SPI2_PIN_NUM_CLK            1
-#endif
-
-#define SPI2_PIN_NUM_CS1            1
-#define SPI2_PIN_NUM_CS2            1
-#define SPI2_PIN_NUM_CS3            1
-#define SPI2_PIN_NUM_CS4            1
-#define SPI2_PIN_NUM_CS5            1
-#define SPI2_PIN_NUM_CS6            1
-
-#define SPI3_MAX_TRANSFER_SIZE      240 * 1
 #define SPI3_PIN_NUM_MISO           2
 #define SPI3_PIN_NUM_MOSI           2
 #define SPI3_PIN_NUM_CLK            2
+#else #define ESP32_SOC
+#define SPI2_PIN_NUM_MISO           12
+#define SPI2_PIN_NUM_MOSI           13
+#define SPI2_PIN_NUM_CLK            14
+#define SPI3_PIN_NUM_MISO           19
+#define SPI3_PIN_NUM_MOSI           23
+#define SPI3_PIN_NUM_CLK            18
+#endif
 
-#define SPI3_PIN_NUM_CS1            2
-#define SPI3_PIN_NUM_CS2            2
-#define SPI3_PIN_NUM_CS3            2
+
 
 static void hl_spi2_device1_pre_transfer_callback(spi_transaction_t *t);
 

@@ -58,6 +58,7 @@ driver
 #i2c
 set(i2c_source 
 "hl_i2c/hl_simulate_i2c.c"
+"hl_i2c/hl_i2c.c"
 )
 set(i2c_include 
 "hl_i2c"
@@ -66,6 +67,10 @@ set(i2c_requires
 driver
 )
 
+#main_config
+set(main_config_requires 
+main
+)
 
 idf_component_register(SRCS ${nvs_source}
                             ${ble_source}
@@ -85,6 +90,7 @@ idf_component_register(SRCS ${nvs_source}
                                 ${spi_requires}
                                 ${uart_requires}
                                 ${i2c_requires}
+                                ${main_config_requires}
                        )
 
 target_compile_options(${COMPONENT_LIB} PRIVATE "-Wno-format")
