@@ -6,14 +6,14 @@
 #define SPI2_MAX_TRANSFER_SIZE      240 * 1
 #define SPI3_MAX_TRANSFER_SIZE      240 * 1
 
-#ifdef ESP32S3_SOC
+#if defined(ESP32S3_SOC)
 #define SPI2_PIN_NUM_MISO           13
 #define SPI2_PIN_NUM_MOSI           11
 #define SPI2_PIN_NUM_CLK            12
 #define SPI3_PIN_NUM_MISO           2
 #define SPI3_PIN_NUM_MOSI           2
 #define SPI3_PIN_NUM_CLK            2
-#else #define ESP32_SOC
+#elif defined(ESP32_SOC)
 #define SPI2_PIN_NUM_MISO           12
 #define SPI2_PIN_NUM_MOSI           13
 #define SPI2_PIN_NUM_CLK            14
@@ -21,8 +21,6 @@
 #define SPI3_PIN_NUM_MOSI           23
 #define SPI3_PIN_NUM_CLK            18
 #endif
-
-
 
 static void hl_spi2_device1_pre_transfer_callback(spi_transaction_t *t);
 

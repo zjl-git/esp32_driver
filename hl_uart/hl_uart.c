@@ -1,17 +1,18 @@
 #include <string.h>
 
 #include "hl_uart.h"
+#include "main_config.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
 
-#ifdef ESP32S3_SOC
-#define UART1_TX_PIN_NUM          -1                /*define gpio17*/
-#define UART1_RX_PIN_NUM          -1                /*define gpio18*/
+#if defined(ESP32S3_SOC)
+#define UART1_TX_PIN_NUM          17                /*define gpio17*/
+#define UART1_RX_PIN_NUM          18                /*define gpio18*/
 #define UART2_TX_PIN_NUM          -1
 #define UART2_RX_PIN_NUM          -1
-#else #define ESP32_SOC
+#elif defined(ESP32_SOC)
 #define UART1_TX_PIN_NUM          -1                /*define gpio10*/
 #define UART1_RX_PIN_NUM          -1                /*define gpio9*/
 #define UART2_TX_PIN_NUM          -1                /*define gpio17*/
@@ -36,26 +37,30 @@ static void hl_uart1_event_task(void *pvParameters)
     uint8_t *buffer = (uint8_t*) malloc(UART1_RX_BUF_SIZE);
 
     while (1) {
-        if (xQueueReceive(g_uart1_queue, (void * )&event, (TickType_t)portMAX_DELAY)) {
-            switch (event.type) {
-                case UART_DATA:
-                    uart_read_bytes(HL_UART_PORT1, buffer, event.size, portMAX_DELAY);
+        if (xQueueReceive(g_uart1_queue, (void * )&event, (TickType_t)portMAX_DELAY) != pdTRUE) { 
+            continue;
+        }
+
+        switch (event.type) {
+            case UART_DATA:
+                uart_read_bytes(HL_UART_PORT1, buffer, event.size, portMAX_DELAY);
+                if (g_uart_rx_cal[HL_UART_PORT1] != NULL) {
                     g_uart_rx_cal[HL_UART_PORT1](buffer, event.size);
-                    break;
+                }
+                break;
 
-                case UART_FIFO_OVF:
-                    uart_flush_input(HL_UART_PORT1);
-                    xQueueReset(g_uart1_queue);
-                    break;
+            case UART_FIFO_OVF:
+                uart_flush_input(HL_UART_PORT1);
+                xQueueReset(g_uart1_queue);
+                break;
 
-                case UART_BUFFER_FULL:
-                    uart_flush_input(HL_UART_PORT1);
-                    xQueueReset(g_uart1_queue);
-                    break;
+            case UART_BUFFER_FULL:
+                uart_flush_input(HL_UART_PORT1);
+                xQueueReset(g_uart1_queue);
+                break;
 
-                default:
-                    break;
-            }
+            default:
+                break;
         }
     }
 }
@@ -66,26 +71,30 @@ static void hl_uart2_event_task(void *pvParameters)
     uint8_t *buffer = (uint8_t*) malloc(UART2_RX_BUF_SIZE);
 
     while (1) {
-        if (xQueueReceive(g_uart2_queue, (void * )&event, (TickType_t)portMAX_DELAY)) {
-            switch (event.type) {
-                case UART_DATA:
-                    uart_read_bytes(HL_UART_PORT2, buffer, event.size, portMAX_DELAY);
+        if (xQueueReceive(g_uart2_queue, (void * )&event, (TickType_t)portMAX_DELAY) != pdTRUE) {
+            continue;
+        }
+
+        switch (event.type) {
+            case UART_DATA:
+                uart_read_bytes(HL_UART_PORT2, buffer, event.size, portMAX_DELAY);
+                if (g_uart_rx_cal[HL_UART_PORT2] != NULL) {
                     g_uart_rx_cal[HL_UART_PORT2](buffer, event.size);
-                    break;
+                }
+                break;
 
-                case UART_FIFO_OVF:
-                    uart_flush_input(HL_UART_PORT2);
-                    xQueueReset(g_uart2_queue);
-                    break;
+            case UART_FIFO_OVF:
+                uart_flush_input(HL_UART_PORT2);
+                xQueueReset(g_uart2_queue);
+                break;
 
-                case UART_BUFFER_FULL:
-                    uart_flush_input(HL_UART_PORT2);
-                    xQueueReset(g_uart2_queue);
-                    break;
+            case UART_BUFFER_FULL:
+                uart_flush_input(HL_UART_PORT2);
+                xQueueReset(g_uart2_queue);
+                break;
 
-                default:
-                    break;
-            }
+            default:
+                break;
         }
     }
 }
